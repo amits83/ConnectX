@@ -5,6 +5,8 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include "ConnectX.h"
+
+using namespace std;
  
 class ConnectXTest : public ::testing::Test
 {
@@ -15,11 +17,14 @@ class ConnectXTest : public ::testing::Test
 		virtual void TearDown(){}
 };
 
+//Sanity check
 TEST(ConnectXTest, sanityCheck)
 {
 	ASSERT_TRUE(true);
 }
 
+//test to check out of bounds condition
+//test should return invalid but return empty
 TEST(ConnectXtest, checkOutofBounds)
 {
     ConnectX c(9,8,5);
@@ -60,7 +65,6 @@ TEST(ConnectXtest, checknextPlacePiece)
 TEST(ConnectXtest, checkShowBoard)
 {
     ConnectX c(9,8,5);
-    c.placePiece(-1);
     c.showBoard();
     Piece isShowing = c.at(-1,7);
     //ASSERT_EQ(isShowing,-1);   //this is the correct test
@@ -70,7 +74,17 @@ TEST(ConnectXtest, checkShowBoard)
 TEST(ConnectXtest, checkoutofPlacePiece)
 {
     ConnectX c(9,8,5);
-    c.placePiece(-1);
+    c.placePiece(-1);           //This triggers a core dump as at() tries to return a non-existent board value
     //ASSERT_EQ(c.at(-1,7), -1);  //this is the correct test
     ASSERT_EQ(c.at(-1,7), 2);  //this should fail but passes
+}
+
+
+TEST(ConnectXtest, checkPlayerTurn)
+{
+    ConnectX c(9,8,5);
+    Piece beforeTurn=c.whoseTurn();
+    c.placePiece(-1);           //This triggers a core dump as at() tries to return a non-existent board value
+    Piece afterTurn=c.whoseTurn();
+    ASSERT_EQ(beforeTurn,afterTurn);    //this is the correct test but fails
 }
