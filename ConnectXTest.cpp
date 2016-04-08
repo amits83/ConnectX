@@ -19,3 +19,11 @@ TEST(ConnectXTest, sanityCheck)
 {
 	ASSERT_TRUE(true);
 }
+
+TEST(ConnectXtest, checkBounds)
+{
+    ConnectX c(9,8,5);
+    Piece isIn = c.at(8,7);
+    ASSERT_EQ(isIn,-1);
+}
+
