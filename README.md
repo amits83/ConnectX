@@ -1,30 +1,17 @@
-Code analysis by Amit Shinde (006955001)
+# Code analysis by Amit Shinde (006955001)
 
-Bug 1 -
-Description : Incorrect boundary check in ConnectX constructor
-Details :
+## Bug 1 :
+### Description : Incorrect boundary check in ConnectX::inBounds()
+#### Details:
 
-In ConnectX.cpp, the constructor checks for height,width and to win values less than 0.
-It should also check for values greater than `DEFAULT_WIDTH`, `DEFAULT_HEIGHT` & `DEFAULT_TO_WIN`.
+In ConnectX.cpp, the ConnectX::inBounds function will return true even if the width is -ve( and out of bounds).
 
-The following code snippet should be modified :
-```
-    if( wide <= 0 || high <= 0 || x <= 0)
-    {
-        wide=DEFAULT_WIDTH;
-        high=DEFAULT_HEIGHT;
-        x=DEFAULT_TO_WIN;
-    }
+It should check for both height and width together and then send the result.
 
-```
+This results in the ConnectX::at() function failing to return correct output as well.
 
-to :
+## Bug 2 :
+### Description : No column value check in ConnectX::placePiece()
+#### Details :
 
-```
-    if( wide <= 0 || high <= 0 || x <= 0 || wide > DEAFULT_WIDTH || high > DEFAULT_HEIGHT || x > DEAFULT_TO_WIN)
-    {
-        wide=DEFAULT_WIDTH;
-        high=DEFAULT_HEIGHT;
-        x=DEFAULT_TO_WIN;
-    }
-```
+In the placePiece() function, the column parameter should be checked if its less than 0 or outofbounds.
